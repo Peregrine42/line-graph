@@ -35,11 +35,15 @@ var LineGraph = React.createClass({
     var min_y = d3.min(data, function(d) { return (d.y) });
     var max_y = d3.max(data, function(d) { return (d.y) });
 
+		var graph_width = this.props.width*0.9
+		var graph_height = this.props.height*0.9
+	  var graph_x = this.props.width*0.1
+	  var graph_y = this.props.height*0.1
 		var xRange = d3.scale.linear()
-		  .range([40, 400]) // the amount of the svg to cover
-			.domain([min_x, max_x]); // the range of values we'll be showing
+		  .range([graph_x, graph_width]) // the amount of the svg to cover
+			.domain([min_x, max_x]);       // the range of values we'll be showing
 		var yRange = d3.scale.linear()
-	    .range([400, 40])
+	    .range([graph_height, graph_y])
 	    .domain([min_y, max_y]);
 
 		var xAxis = d3.svg.axis().scale(xRange);
@@ -48,9 +52,9 @@ var LineGraph = React.createClass({
 		var graph = React.findDOMNode(this);
 		var d3_graph = d3.select(graph);
 		d3_graph.append("svg:g").call(xAxis)
-	    .attr("transform", "translate(0, 400)");
+	    .attr("transform", "translate(0, " + graph_height + ")");
 		d3_graph.append("svg:g").call(yAxis)
-	    .attr("transform", "translate(40, 0)");
+	    .attr("transform", "translate(" + graph_x + ", 0)");
 
 		var circles = d3_graph.selectAll("circle").data(data);
 
@@ -60,8 +64,7 @@ var LineGraph = React.createClass({
 			.attr("cx", function(d) { return xRange (d.x); })
 			.attr("cy", function(d) { return yRange (d.y); })
 			.attr("r", 10)
-			.style("fill", "red");
-
+			.attr("class", "line-graph dot");
 	},
 	render: function() {
 		var graph = <svg
