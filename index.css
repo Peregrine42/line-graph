@@ -1,3 +1,13 @@
 .line-graph.dot {
 	fill: coral;
+	stroke: White;
+	stroke-width: 2;
+}
+
+.line-graph.axis {
+	stroke: DarkGray;
+}
+
+body {
+	background: Black;
 }

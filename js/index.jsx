@@ -52,9 +52,11 @@ var LineGraph = React.createClass({
 		var graph = React.findDOMNode(this);
 		var d3_graph = d3.select(graph);
 		d3_graph.append("svg:g").call(xAxis)
-	    .attr("transform", "translate(0, " + graph_height + ")");
+	    .attr("transform", "translate(0, " + graph_height + ")")
+		  .attr("class", "line-graph axis");
 		d3_graph.append("svg:g").call(yAxis)
-	    .attr("transform", "translate(" + graph_x + ", 0)");
+	    .attr("transform", "translate(" + graph_x + ", 0)")
+		  .attr("class", "line-graph axis");
 
 		var circles = d3_graph.selectAll("circle").data(data);
 
