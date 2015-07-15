@@ -25,6 +25,45 @@ var sample_data = [
   }
 ];
 
+var d3_chart = {};
+
+d3_chart.create = function(el, props, state) {
+	var svg = d3.select(el).append("svg")
+		.attr("class", "d3")
+		.attr("width", props.width)
+		.attr("height", props.height)
+
+	svg.append("g")
+		.attr("class", "d3-points");
+
+	this.update(el, state);
+};
+
+d3_chart.update = function(el, state) {
+	var scales = this._scales(el, state.domain);
+	this._draw_points(el, scales, state.data);
+}
+
+d3_chart.destroy = function(el) {
+  // Any clean-up would go here
+  // in this example there is nothing to do
+};
+
+d3_chart._draw_points = function(el, scales , data) {
+  var g = d3.select(el).selectAll('.d3-points');
+
+  var point = g.selectAll('.d3-point')
+    .data(data);
+
+	point
+		.enter()
+		.insert("circle")
+		.attr("cx", function(d) { return xRange (d.x); })
+		.attr("cy", function(d) { return yRange (d.y); })
+		.attr("r", 10)
+		.attr("class", "line-graph dot");
+}
+
 var LineGraph = React.createClass({
 	componentDidMount: function() {
 		var data = this.props.initial_data;
