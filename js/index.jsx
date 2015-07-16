@@ -25,6 +25,11 @@ var sample_data = [
   }
 ];
 
+var graph_props = {
+	margin_x: 20,
+	margin_y: 20
+}
+
 var d3_chart = {};
 
 d3_chart.create = function(el, props, state) {
@@ -39,16 +44,6 @@ d3_chart.create = function(el, props, state) {
 	this.update(el, state);
 };
 
-d3_chart.update = function(el, state) {
-	var scales = this._scales(el, state.domain);
-	this._draw_points(el, scales, state.data);
-}
-
-d3_chart.destroy = function(el) {
-  // Any clean-up would go here
-  // in this example there is nothing to do
-};
-
 d3_chart._draw_points = function(el, scales , data) {
   var g = d3.select(el).selectAll('.d3-points');
 
@@ -58,10 +53,54 @@ d3_chart._draw_points = function(el, scales , data) {
 	point
 		.enter()
 		.insert("circle")
-		.attr("cx", function(d) { return xRange (d.x); })
-		.attr("cy", function(d) { return yRange (d.y); })
+		.attr("cx", function(d) { return scales.x (d.x); })
+		.attr("cy", function(d) { return scales.y (d.y); })
 		.attr("r", 10)
 		.attr("class", "line-graph dot");
+};
+
+d3_chart._scales = function(el, domain) {
+
+	var width = el.offsetWidth - (graph_props.margin_x*2);
+	var height = el.offsetHeight - (graph_props.margin_y*2);
+
+	var x = d3.scale.linear()
+		.range([0, width]) // the amount of the svg to cover
+		.domain(domain.x); // the range of values we'll be showing
+	var y = d3.scale.linear()
+		.range([height, 0])
+		.domain(domain.y);
+	return {
+		x: x,
+		y: y
+	};
+};
+
+d3_chart._draw_axis = function(el, domain, graph_props) {
+	var xAxis = d3.svg.axis().scale(domain.x);
+	var yAxis = d3.svg.axis().scale(domain.y).orient("left");
+
+	var width = el.offsetWidth - (graph_props.margin_x*2);
+	var height = el.offsetHeight - (graph_props.margin_y*2);
+
+	el_for_d3 = d3.select(".d3");
+	el_for_d3.append("svg:g").call(xAxis)
+		.attr("transform", "translate(" +  graph_props.margin_x + ", " + height + ")")
+		.attr("class", "line-graph axis");
+	el_for_d3.append("svg:g").call(yAxis)
+		.attr("transform", "translate(" + graph_props.margin_x + ", " + graph_props.margin_y + ")")
+		.attr("class", "line-graph axis");
+};
+
+d3_chart.update = function(el, state) {
+	var scales = this._scales(el, state.domain);
+	this._draw_axis(el, scales, graph_props);
+	this._draw_points(el, scales, state.data);
+}
+
+d3_chart.destroy = function(el) {
+  // Any clean-up would go here
+  // in this example there is nothing to do
 };
 
 var Chart = React.createClass({
@@ -73,15 +112,15 @@ var Chart = React.createClass({
 	componentDidMount: function() {
 	  var el = this.getDOMNode();
 
-		d3Chart.create(el, {
+		d3_chart.create(el, {
 			width: '100%',
 			height: '300px'
 		}, this.getChartState());
-	}
+	},
 
   componentDidUpdate: function() {
     var el = this.getDOMNode();
-    d3Chart.update(el, this.getChartState());
+    d3_chart.update(el, this.getChartState());
   },
 
   getChartState: function() {
@@ -93,7 +132,7 @@ var Chart = React.createClass({
 
   componentWillUnmount: function() {
     var el = this.getDOMNode();
-    d3Chart.destroy(el);
+    d3_chart.destroy(el);
   },
 
   render: function() {
@@ -113,7 +152,7 @@ var App = React.createClass({
 
 		return {
 			data: sample_data,
-			domain: { x: [min_x, min_y], y: [min_y, max_y] },
+			domain: { x: [min_x, max_x], y: [min_y, max_y] },
 	  };
   },
 
