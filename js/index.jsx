@@ -25,148 +25,157 @@ var sample_data = [
   }
 ];
 
-var graph_props = {
-	margin_x: 20,
-	margin_y: 20
+var props = {
+	width: "100%",
+	height: "300px",
+	margin: {
+		top: 0.1,
+		bottom: 0.1,
+		right: 0.1,
+		left: 0.1
+	}
 }
 
-var d3_chart = {};
+var chart = {};
 
-d3_chart.create = function(el, props, state) {
-	var svg = d3.select(el).append("svg")
-		.attr("class", "d3")
-		.attr("width", props.width)
-		.attr("height", props.height)
 
-	svg.append("g")
-		.attr("class", "d3-points");
 
-	this.update(el, state);
-};
 
-d3_chart._draw_points = function(el, scales , data) {
-  var g = d3.select(el).selectAll('.d3-points');
+//d3_chart.create = function(el, props, state) {
+	//var svg = d3.select(el).append("svg")
+		//.attr("class", "d3")
+		//.attr("width", props.width)
+		//.attr("height", props.height)
 
-  var point = g.selectAll('.d3-point')
-    .data(data);
+	//svg.append("g")
+		//.attr("class", "d3-points");
 
-	point
-		.enter()
-		.insert("circle")
-		.attr("cx", function(d) { return scales.x (d.x); })
-		.attr("cy", function(d) { return scales.y (d.y); })
-		.attr("r", 10)
-		.attr("class", "line-graph dot");
-};
+	//this.update(el, state);
+//};
 
-d3_chart._scales = function(el, domain) {
+//d3_chart._draw_points = function(el, scales , data) {
+  //var g = d3.select(el).selectAll('.d3-points');
 
-	var width = el.offsetWidth - (graph_props.margin_x*2);
-	var height = el.offsetHeight - (graph_props.margin_y*2);
+  //var point = g.selectAll('.d3-point')
+    //.data(data);
 
-	var x = d3.scale.linear()
-		.range([0, width]) // the amount of the svg to cover
-		.domain(domain.x); // the range of values we'll be showing
-	var y = d3.scale.linear()
-		.range([height, 0])
-		.domain(domain.y);
-	return {
-		x: x,
-		y: y
-	};
-};
+	//point
+		//.enter()
+		//.insert("circle")
+		//.attr("cx", function(d) { return scales.x (d.x); })
+		//.attr("cy", function(d) { return scales.y (d.y); })
+		//.attr("r", 10)
+		//.attr("class", "line-graph dot");
+//};
 
-d3_chart._draw_axis = function(el, domain, graph_props) {
-	var xAxis = d3.svg.axis().scale(domain.x);
-	var yAxis = d3.svg.axis().scale(domain.y).orient("left");
+//d3_chart._scales = function(el, domain) {
 
-	var width = el.offsetWidth - (graph_props.margin_x*2);
-	var height = el.offsetHeight - (graph_props.margin_y*2);
+	//var width = el.offsetWidth - (graph_props.margin_x*2);
+	//var height = el.offsetHeight - (graph_props.margin_y*2);
 
-	el_for_d3 = d3.select(".d3");
-	el_for_d3.append("svg:g").call(xAxis)
-		.attr("transform", "translate(" +  graph_props.margin_x + ", " + height + ")")
-		.attr("class", "line-graph axis");
-	el_for_d3.append("svg:g").call(yAxis)
-		.attr("transform", "translate(" + graph_props.margin_x + ", " + graph_props.margin_y + ")")
-		.attr("class", "line-graph axis");
-};
+	//var x = d3.scale.linear()
+		//.range([0, width]) // the amount of the svg to cover
+		//.domain(domain.x); // the range of values we'll be showing
+	//var y = d3.scale.linear()
+		//.range([height, 0])
+		//.domain(domain.y);
+	//return {
+		//x: x,
+		//y: y
+	//};
+//};
 
-d3_chart.update = function(el, state) {
-	var scales = this._scales(el, state.domain);
-	this._draw_axis(el, scales, graph_props);
-	this._draw_points(el, scales, state.data);
-}
+//d3_chart._draw_axis = function(el, domain, graph_props) {
+	//var xAxis = d3.svg.axis().scale(domain.x);
+	//var yAxis = d3.svg.axis().scale(domain.y).orient("left");
 
-d3_chart.destroy = function(el) {
+	//var width = el.offsetWidth - (graph_props.margin_x*2);
+	//var height = el.offsetHeight - (graph_props.margin_y*2);
+
+	//el_for_d3 = d3.select(".d3");
+	//el_for_d3.append("svg:g").call(xAxis)
+		//.attr("transform", "translate(" +  graph_props.margin_x + ", " + height + ")")
+		//.attr("class", "line-graph axis");
+	//el_for_d3.append("svg:g").call(yAxis)
+		//.attr("transform", "translate(" + graph_props.margin_x + ", " + graph_props.margin_y + ")")
+		//.attr("class", "line-graph axis");
+//};
+
+//d3_chart.update = function(el, state) {
+	//var scales = this._scales(el, state.domain);
+	//this._draw_axis(el, scales, graph_props);
+	//this._draw_points(el, scales, state.data);
+//}
+
+//d3_chart.destroy = function(el) {
   // Any clean-up would go here
   // in this example there is nothing to do
-};
+//};
 
-var Chart = React.createClass({
-	propTypes: {
-		data: React.PropTypes.array,
-		domain: React.PropTypes.object
-	},
+//var Chart = React.createClass({
+	//propTypes: {
+		//data: React.PropTypes.array,
+		//domain: React.PropTypes.object
+	//},
 
-	componentDidMount: function() {
-	  var el = this.getDOMNode();
+	//componentDidMount: function() {
+		//var el = this.getDOMNode();
 
-		d3_chart.create(el, {
-			width: '100%',
-			height: '300px'
-		}, this.getChartState());
-	},
+		//d3_chart.create(el, {
+			//width: '100%',
+			//height: '300px'
+		//}, this.getChartState());
+	//},
 
-  componentDidUpdate: function() {
-    var el = this.getDOMNode();
-    d3_chart.update(el, this.getChartState());
-  },
+  //componentDidUpdate: function() {
+    //var el = this.getDOMNode();
+    //d3_chart.update(el, this.getChartState());
+  //},
 
-  getChartState: function() {
-    return {
-      data: this.props.data,
-      domain: this.props.domain
-    };
-  },
+  //getChartState: function() {
+    //return {
+      //data: this.props.data,
+      //domain: this.props.domain
+    //};
+  //},
 
-  componentWillUnmount: function() {
-    var el = this.getDOMNode();
-    d3_chart.destroy(el);
-  },
+  //componentWillUnmount: function() {
+    //var el = this.getDOMNode();
+    //d3_chart.destroy(el);
+  //},
 
-  render: function() {
-    return (
-      <div className="chart"></div>
-    );
-  }
-});
+  //render: function() {
+    //return (
+      //<div className="chart"></div>
+    //);
+  //}
+//});
 
-var App = React.createClass({
-  getInitialState: function() {
-    var min_x = d3.min(sample_data, function(d) { return (d.x) });
-    var max_x = d3.max(sample_data, function(d) { return (d.x) });
+//var App = React.createClass({
+  //getInitialState: function() {
+    //var min_x = d3.min(sample_data, function(d) { return (d.x) });
+    //var max_x = d3.max(sample_data, function(d) { return (d.x) });
 
-    var min_y = d3.min(sample_data, function(d) { return (d.y) });
-    var max_y = d3.max(sample_data, function(d) { return (d.y) });
+    //var min_y = d3.min(sample_data, function(d) { return (d.y) });
+    //var max_y = d3.max(sample_data, function(d) { return (d.y) });
 
-		return {
-			data: sample_data,
-			domain: { x: [min_x, max_x], y: [min_y, max_y] },
-	  };
-  },
+		//return {
+			//data: sample_data,
+			//domain: { x: [min_x, max_x], y: [min_y, max_y] },
+		//};
+  //},
 
-	render: function() {
-		return (
-			<div className="app">
-			  <Chart
-				  data={this.state.data}
-					domain={this.state.domain}
-				/>
-			</div>
-		);
-	}
-});
+	//render: function() {
+		//return (
+			//<div className="app">
+				//<Chart
+					//data={this.state.data}
+					//domain={this.state.domain}
+				///>
+			//</div>
+		//);
+	//}
+//});
 
 //var LineGraph = React.createClass({
 	//componentDidMount: function() {
